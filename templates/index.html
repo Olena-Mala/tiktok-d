@@ -6,117 +6,65 @@
     <title>{{ lang.title }}</title>
     <meta name="description" content="{{ lang.description }}">
     <meta name="keywords" content="{{ lang.keywords }}">
-    <meta name="author" content="TikTok Downloader">
     
     <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ТВІЙ-КОД"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ТВІЙ-КОД" crossorigin="anonymous"></script>
     
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
         }
         
-        .container {
-            max-width: 900px;
+        /* Top Banner */
+        .top-banner {
+            background: #fff;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Main Container */
+        .main-container {
+            max-width: 800px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        /* Рекламні контейнери */
-        .ad-container {
-            margin: 20px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             text-align: center;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px dashed #dee2e6;
-        }
-        
-        .top-ad {
-            margin-top: 0;
-            margin-bottom: 25px;
-        }
-        
-        .sticky-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            margin: 0;
-            border-radius: 0;
-            z-index: 999;
-            background: white;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            padding: 10px;
-        }
-        
-        .ad-placeholder {
-            padding: 20px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 8px;
-            color: #666;
-            font-weight: bold;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
         }
         
         h1 {
-            font-size: 2.8em;
-            margin-bottom: 10px;
+            font-size: 2.5em;
+            margin-bottom: 15px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
         .description {
-            font-size: 1.2em;
             color: #666;
             margin-bottom: 30px;
+            font-size: 1.1em;
         }
         
-        .language-switcher {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        
-        .lang-btn {
-            background: none;
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-left: 10px;
-            transition: all 0.3s;
-        }
-        
-        .lang-btn:hover, .lang-btn.active {
-            background: #667eea;
-            color: white;
-        }
-        
+        /* Download Form */
         .download-form {
             background: #f8f9fa;
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .input-group {
@@ -127,11 +75,10 @@
         
         input[type="text"] {
             flex: 1;
-            padding: 18px;
-            border: 3px solid #e9ecef;
-            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
             font-size: 16px;
-            transition: border-color 0.3s;
         }
         
         input[type="text"]:focus {
@@ -140,13 +87,13 @@
         }
         
         button.download-btn {
-            padding: 18px 35px;
+            padding: 16px 30px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             transition: transform 0.3s;
         }
@@ -155,19 +102,23 @@
             transform: translateY(-2px);
         }
         
-        .result {
-            margin-top: 30px;
-            text-align: center;
+        /* Result Section */
+        .result-section {
+            display: none;
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
         }
         
-        .video-preview {
-            margin: 25px 0;
+        .video-container {
+            margin: 20px 0;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         
-        .download-link {
+        .download-video-btn {
             display: inline-block;
             padding: 15px 30px;
             background: linear-gradient(135deg, #48bb78, #38a169);
@@ -175,71 +126,81 @@
             text-decoration: none;
             border-radius: 10px;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
+            margin-top: 20px;
             transition: transform 0.3s;
         }
         
-        .download-link:hover {
+        .download-video-btn:hover {
             transform: translateY(-2px);
         }
         
-        .error {
-            color: #e53e3e;
-            background: #fed7d7;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 25px 0;
-            font-size: 16px;
-        }
-        
-        .loading {
-            color: #667eea;
-            font-size: 20px;
-            padding: 30px;
-        }
-        
-        /* Pop-up стилі */
-        .popup {
+        /* Loading Overlay */
+        .loading-overlay {
             display: none;
             position: fixed;
-            z-index: 1000;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
         
-        .popup-content {
-            background-color: #fff;
-            margin: 10% auto;
+        .loading-spinner {
+            color: white;
+            font-size: 24px;
+            background: rgba(255,255,255,0.1);
             padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
         
-        .close {
-            color: #aaa;
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 32px;
+        /* FAQ Section */
+        .faq-section {
+            margin: 40px 0;
+            text-align: left;
+        }
+        
+        .faq-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+        
+        .faq-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .faq-question {
             font-weight: bold;
-            cursor: pointer;
+            margin-bottom: 10px;
+            color: #333;
         }
         
-        .close:hover {
-            color: #000;
+        .faq-answer {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Footer Banner */
+        .footer-banner {
+            background: #fff;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
         }
         
         @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-                margin: 10px;
-            }
-            
             .input-group {
                 flex-direction: column;
             }
@@ -249,122 +210,130 @@
             }
             
             h1 {
-                font-size: 2.2em;
+                font-size: 2em;
             }
             
-            .sticky-footer {
-                position: relative;
-                margin-top: 30px;
+            .main-container {
+                padding: 20px;
+                margin: 10px;
             }
         }
     </style>
 </head>
 <body>
     <!-- Top Banner Ad -->
-    <div class="ad-container top-ad">
-        <div class="ad-placeholder">
-            [ Рекламный баннер ]
-        </div>
+    <div class="top-banner">
+        <div class="ad-placeholder">[ Рекламный баннер ]</div>
     </div>
 
-    <div class="container">
-        <div class="language-switcher">
-            <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
-            <button class="lang-btn" onclick="setLanguage('en')">EN</button>
-        </div>
-        
-        <div class="header">
-            <h1>📥 TikTok Downloader</h1>
-            <p class="description">{{ lang.description }}</p>
-        </div>
+    <div class="main-container">
+        <h1>📥 TikTok Downloader</h1>
+        <p class="description">{{ lang.description }}</p>
         
         <div class="download-form">
             <div class="input-group">
                 <input type="text" id="tiktokUrl" placeholder="{{ lang.placeholder }}" />
-                <button class="download-btn" onclick="downloadVideo()">{{ lang.download_btn }}</button>
+                <button class="download-btn" onclick="startDownload()">{{ lang.download_btn }}</button>
             </div>
         </div>
         
-        <div class="ad-container">
-            <div class="ad-placeholder">
-                [ Рекламный баннер ]
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <h3>✅ {{ lang.success }}</h3>
+            <div class="video-container">
+                <video controls width="100%" id="videoPlayer" style="max-width: 600px;">
+                    Ваш браузер не поддерживает видео
+                </video>
             </div>
+            <a href="#" id="downloadLink" class="download-video-btn" download>
+                ⬇️ Скачать видео
+            </a>
         </div>
         
-        <div id="result"></div>
-    </div>
-
-    <!-- Sticky Footer Ad -->
-    <div class="ad-container sticky-footer">
-        <div class="ad-placeholder">
-            [ Рекламный баннер ]
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h3 class="faq-title">❓ Часто задаваемые вопросы</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question">Как скачать видео с TikTok?</div>
+                <div class="faq-answer">Просто вставьте ссылку на видео в поле выше и нажмите "Скачать видео".</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Будет ли водяной знак на видео?</div>
+                <div class="faq-answer">Нет, все видео скачиваются без водяного знака TikTok.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Это бесплатно?</div>
+                <div class="faq-answer">Да, наш сервис полностью бесплатный и не требует регистрации.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Какое качество видео?</div>
+                <div class="faq-answer">Видео скачиваются в оригинальном HD качестве.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Работает ли на телефоне?</div>
+                <div class="faq-answer">Да, наш сайт оптимизирован для всех устройств.</div>
+            </div>
         </div>
     </div>
 
-    <!-- Pop-up Ad -->
-    <div id="popupAd" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <div class="ad-placeholder">
-                [ Всплывающая реклама ]
-            </div>
+    <!-- Footer Banner Ad -->
+    <div class="footer-banner">
+        <div class="ad-placeholder">[ Рекламный баннер ]</div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            ⏳ {{ lang.loading }}
         </div>
     </div>
 
     <script>
-    async function setLanguage(lang) {
-        await fetch(`/set_language/${lang}`);
-        window.location.reload();
-    }
-    
-    async function downloadVideo() {
+    function startDownload() {
         const url = document.getElementById('tiktokUrl').value;
-        const resultDiv = document.getElementById('result');
+        const loadingOverlay = document.getElementById('loadingOverlay');
         
         if (!url) {
-            resultDiv.innerHTML = `<div class="error">❌ {{ lang.error_url }}</div>`;
+            alert('{{ lang.error_url }}');
             return;
         }
         
-        resultDiv.innerHTML = `<div class="loading">⏳ {{ lang.loading }}</div>`;
+        // Показуємо завантаження
+        loadingOverlay.style.display = 'flex';
         
-        try {
-            const response = await fetch(`/api/download?url=${encodeURIComponent(url)}`);
-            const data = await response.json();
-            
-            if (data.success) {
-                resultDiv.innerHTML = `
-                    <div class="result">
-                        <h3>✅ {{ lang.success }}</h3>
-                        <div class="video-preview">
-                            <video controls width="100%" style="max-width: 600px;">
-                                <source src="${data.video_url}" type="video/mp4">
-                            </video>
-                        </div>
-                        <br>
-                        <a href="${data.video_url}" download="${data.title}" class="download-link">
-                            ⬇️ {{ lang.download_btn }}
-                        </a>
-                    </div>
-                `;
+        fetch(`/api/download?url=${encodeURIComponent(url)}`)
+            .then(response => response.json())
+            .then(data => {
+                loadingOverlay.style.display = 'none';
                 
-                // Показує pop-up після завантаження
-                setTimeout(showPopupAd, 1000);
-                
-            } else {
-                resultDiv.innerHTML = `<div class="error">❌ ${data.error}</div>`;
-            }
-        } catch (error) {
-            resultDiv.innerHTML = `<div class="error">❌ {{ lang.error_general }}</div>`;
-        }
-    }
-    
-    function showPopupAd() {
-        document.getElementById('popupAd').style.display = 'block';
-    }
-    
-    function closePopup() {
-        document.getElementById('popupAd').style.display = 'none';
+                if (data.success) {
+                    // Показуємо результат
+                    const resultSection = document.getElementById('resultSection');
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    const downloadLink = document.getElementById('downloadLink');
+                    
+                    videoPlayer.src = data.video_url;
+                    downloadLink.href = data.video_url;
+                    downloadLink.download = data.title;
+                    
+                    resultSection.style.display = 'block';
+                    
+                    // Прокручуємо до результату
+                    resultSection.scrollIntoView({ behavior: 'smooth' });
+                    
+                } else {
+                    alert('❌ ' + data.error);
+                }
+            })
+            .catch(error => {
+                loadingOverlay.style.display = 'none';
+                alert('❌ Ошибка сети. Попробуйте еще раз.');
+            });
     }
     
     // Автофокус на поле ввода
