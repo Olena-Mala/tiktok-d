@@ -37,39 +37,77 @@ LANGUAGES = {
     }
 }
 
-def download_tiktok_video(url):
-    """Альтернативний метод завантаження через API"""
+def get_tiktok_video(url):
+    """Спробуємо всі можливі API послідовно"""
+    apis = [
+        # Список робочих API
+        f"https://api.tikmate.app/api/download?url={url}",
+        f"https://api.tiktokdownload.net/download?url={url}",
+        f"https://tikdown.org/api?url={url}",
+        f"https://www.tikwm.com/api/?url={url}",
+        f"https://tiktok-downloader-download-tiktok-videos-without-watermark.p.rapidapi.com/vid/index?url={url}"
+    ]
+    
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    
+    for api_url in apis:
+        try:
+            print(f"Trying API: {api_url}")
+            response = requests.get(api_url, headers=headers, timeout=15)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Перевіряємо різні формати відповідей
+                if data.get('video_url'):
+                    return {'success': True, 'video_url': data['video_url']}
+                elif data.get('data') and data['data'].get('play'):
+                    return {'success': True, 'video_url': data['data']['play']}
+                elif data.get('wmplay'):
+                    return {'success': True, 'video_url': data['wmplay']}
+                elif data.get('nolwmplay'):
+                    return {'success': True, 'video_url': data['nolwmplay']}
+                elif data.get('url'):
+                    return {'success': True, 'video_url': data['url']}
+                    
+        except Exception as e:
+            print(f"API failed: {e}")
+            continue
+    
+    # Якщо всі API не спрацювали, спробуємо через парсинг
     try:
-        # Використовуємо сторонній API сервіс
-        api_url = f"https://api.tiktokdownload.net/download?url={url}"
-        response = requests.get(api_url, timeout=10)
+        return extract_video_directly(url)
+    except:
+        return {'success': False, 'error': 'Все API временно не работают'}
+
+def extract_video_directly(url):
+    """Спроба прямого парсингу"""
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+        }
         
-        if response.status_code == 200:
-            data = response.json()
-            if data.get('success') and data.get('video_url'):
-                return {
-                    'success': True,
-                    'video_url': data['video_url'],
-                    'title': f'tiktok_video_{datetime.now().strftime("%Y%m%d_%H%M%S")}.mp4'
-                }
+        response = requests.get(url, headers=headers, timeout=15)
+        html_content = response.text
         
-        # Резервний метод
-        api_url_2 = f"https://api.tikmate.app/api/download?url={url}"
-        response_2 = requests.get(api_url_2, timeout=10)
-        
-        if response_2.status_code == 200:
-            data_2 = response_2.json()
-            if data_2.get('video_url'):
-                return {
-                    'success': True,
-                    'video_url': data_2['video_url'],
-                    'title': f'tiktok_video_{datetime.now().strftime("%Y%m%d_%H%M%S")}.mp4'
-                }
-        
-        return {'success': False, 'error': 'Не вдалося обробити видео'}
-        
+        # Шукаємо посилання на відео в HTML
+        video_url_match = re.search(r'"playAddr":"(https?://[^"]+\.mp4[^"]*)"', html_content)
+        if video_url_match:
+            video_url = video_url_match.group(1).replace('\\u002F', '/')
+            return {'success': True, 'video_url': video_url}
+            
     except Exception as e:
-        return {'success': False, 'error': str(e)}
+        print(f"Direct parsing failed: {e}")
+    
+    return {'success': False, 'error': 'Не удалось обработать видео'}
 
 @app.route('/')
 def index():
@@ -91,21 +129,23 @@ def download_video():
     if not tiktok_url:
         return jsonify({'success': False, 'error': LANGUAGES[lang]['error_url']})
     
-    # Перевіряємо чи це посилання TikTok
     if 'tiktok.com' not in tiktok_url:
         return jsonify({'success': False, 'error': 'Неверная ссылка TikTok'})
     
-    result = download_tiktok_video(tiktok_url)
+    result = get_tiktok_video(tiktok_url)
     
     if result['success']:
         return jsonify({
             'success': True,
             'video_url': result['video_url'],
-            'title': result['title'],
+            'title': f'tiktok_video_{datetime.now().strftime("%Y%m%d_%H%M%S")}.mp4',
             'quality': 'HD без водяного знака'
         })
     else:
-        return jsonify({'success': False, 'error': LANGUAGES[lang]['error_general']})
+        return jsonify({
+            'success': False, 
+            'error': 'Не удалось загрузить видео. Попробуйте: 1) Другое видео 2) Через 5 минут 3) Другой аккаунт TikTok'
+        })
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
