@@ -14,31 +14,6 @@
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ТВІЙ-КОД" crossorigin="anonymous"></script>
     
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "TikTok Downloader - Скачать видео без водяного знака",
-      "description": "Бесплатное скачивание видео из TikTok без водяного знака в высоком качестве",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1542"
-      }
-    }
-    </script>
-    
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📥</text></svg>">
-    
     <style>
         * {
             margin: 0;
@@ -147,6 +122,45 @@
         button.download-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Video Result Section */
+        .video-result {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .video-container {
+            max-width: 300px;
+            margin: 0 auto 20px;
+        }
+        
+        .video-player {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .download-final-btn {
+            display: inline-block;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .download-final-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
         }
         
         /* Features Grid */
@@ -269,131 +283,6 @@
             margin: 0 auto 15px;
         }
         
-        /* Video Preview Overlay */
-        .video-preview-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 10001;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .video-preview-content {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .video-thumbnail {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 12px;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: white;
-        }
-        
-        .video-info {
-            margin-bottom: 25px;
-        }
-        
-        .video-ready-text {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .video-size {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .download-final-btn {
-            padding: 16px 30px;
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-        }
-        
-        .download-final-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
-        }
-        
-        /* Pop-up Ad */
-        .popup-ad {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 10002;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .popup-ad-content {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-        }
-        
-        .popup-ad-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            color: #999;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-weight: bold;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .popup-ad-close:hover {
-            color: #333;
-            background: #f0f0f0;
-        }
-        
-        .popup-ad-text {
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-        }
-        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -438,29 +327,13 @@
                 font-size: 28px;
             }
             
-            .video-preview-content {
-                padding: 30px;
-                max-width: 350px;
+            .video-container {
+                max-width: 400px;
             }
-        }
-        
-        /* Microdata for SEO */
-        .breadcrumb {
-            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Breadcrumb for SEO -->
-    <div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
-        <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a href="https://ваш-сайт.onrender.com" itemprop="item">
-                <span itemprop="name">Главная</span>
-            </a>
-            <meta itemprop="position" content="1">
-        </span>
-    </div>
-
     <!-- Top Banner Ad -->
     <div class="top-banner">
         <div class="ad-placeholder">[ Рекламный баннер ]</div>
@@ -475,6 +348,18 @@
                 <input type="text" id="tiktokUrl" placeholder="Вставьте ссылку на видео TikTok..." />
                 <button class="download-btn" onclick="startDownload()">Скачать видео</button>
             </div>
+        </div>
+        
+        <!-- Video Result -->
+        <div class="video-result" id="videoResult">
+            <div class="video-container">
+                <video class="video-player" controls id="videoPlayer">
+                    Ваш браузер не поддерживает видео
+                </video>
+            </div>
+            <a href="#" id="finalDownloadLink" class="download-final-btn" download>
+                ⬇️ Скачать видео сейчас
+            </a>
         </div>
         
         <!-- Features Grid -->
@@ -505,25 +390,19 @@
         <div class="faq-section">
             <h3 class="faq-title">❓ Часто задаваемые вопросы</h3>
             
-            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                <div class="faq-question" itemprop="name">Как скачать видео с TikTok?</div>
-                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                    <div class="faq-answer" itemprop="text">Вставьте ссылку в поле выше и нажмите "Скачать видео". Видео автоматически загрузится.</div>
-                </div>
+            <div class="faq-item">
+                <div class="faq-question">Как скачать видео с TikTok?</div>
+                <div class="faq-answer">Вставьте ссылку в поле выше и нажмите "Скачать видео". Видео автоматически загрузится.</div>
             </div>
             
-            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                <div class="faq-question" itemprop="name">Будет ли водяной знак?</div>
-                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                    <div class="faq-answer" itemprop="text">Нет, все видео без водяного знака TikTok.</div>
-                </div>
+            <div class="faq-item">
+                <div class="faq-question">Будет ли водяной знак?</div>
+                <div class="faq-answer">Нет, все видео без водяного знака TikTok.</div>
             </div>
             
-            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                <div class="faq-question" itemprop="name">Это бесплатно?</div>
-                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                    <div class="faq-answer" itemprop="text">Да, полностью бесплатно и без регистрации.</div>
-                </div>
+            <div class="faq-item">
+                <div class="faq-question">Это бесплатно?</div>
+                <div class="faq-answer">Да, полностью бесплатно и без регистрации.</div>
             </div>
         </div>
     </div>
@@ -541,38 +420,7 @@
         </div>
     </div>
 
-    <!-- Pop-up Ad -->
-    <div class="popup-ad" id="popupAd">
-        <div class="popup-ad-content">
-            <button class="popup-ad-close" onclick="closeAd()">×</button>
-            <div class="popup-ad-text">🎉 Видео готово к скачиванию!</div>
-            <div class="ad-placeholder" style="padding: 25px; font-size: 15px;">
-                [ Здесь будет ваша реклама ]<br>
-                <small>Спасибо за использование нашего сервиса!</small>
-            </div>
-        </div>
-    </div>
-
-    <!-- Video Preview Overlay -->
-    <div class="video-preview-overlay" id="videoPreview">
-        <div class="video-preview-content">
-            <div class="video-thumbnail">
-                📹
-            </div>
-            <div class="video-info">
-                <div class="video-ready-text">Ваше видео готово!</div>
-                <div class="video-size">HD качество • Без водяного знака</div>
-            </div>
-            <button class="download-final-btn" onclick="downloadFinal()">
-                ⬇️ Скачать видео сейчас
-            </button>
-        </div>
-    </div>
-
     <script>
-    let currentVideoUrl = '';
-    let currentVideoTitle = '';
-    
     function startDownload() {
         const url = document.getElementById('tiktokUrl').value;
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -597,11 +445,19 @@
                 loadingOverlay.style.display = 'none';
                 
                 if (data.success) {
-                    currentVideoUrl = data.video_url;
-                    currentVideoTitle = data.title;
+                    // Показуємо результат
+                    const videoResult = document.getElementById('videoResult');
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    const downloadLink = document.getElementById('finalDownloadLink');
                     
-                    // Показуємо спливаючу рекламу
-                    showAd();
+                    videoPlayer.src = data.video_url;
+                    downloadLink.href = data.video_url;
+                    downloadLink.download = 'tiktok_video.mp4';
+                    
+                    videoResult.style.display = 'block';
+                    
+                    // Прокручуємо до результату
+                    videoResult.scrollIntoView({ behavior: 'smooth' });
                     
                 } else {
                     alert('❌ ' + data.error);
@@ -611,43 +467,6 @@
                 loadingOverlay.style.display = 'none';
                 alert('❌ Ошибка сети. Попробуйте еще раз.');
             });
-    }
-    
-    function showAd() {
-        // Показуємо рекламу
-        document.getElementById('popupAd').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeAd() {
-        // Закриваємо рекламу і показуємо підтвердження
-        document.getElementById('popupAd').style.display = 'none';
-        showVideoPreview();
-    }
-    
-    function showVideoPreview() {
-        // Показуємо компактне підтвердження з кнопкою скачування
-        const videoPreview = document.getElementById('videoPreview');
-        videoPreview.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function downloadFinal() {
-        // Фінальне скачування
-        const downloadLink = document.createElement('a');
-        downloadLink.href = currentVideoUrl;
-        downloadLink.download = currentVideoTitle;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        // Закриваємо перегляд
-        closeVideoPreview();
-    }
-    
-    function closeVideoPreview() {
-        document.getElementById('videoPreview').style.display = 'none';
-        document.body.style.overflow = 'auto';
     }
     
     // Автофокус на поле ввода
