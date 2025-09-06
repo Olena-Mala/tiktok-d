@@ -269,6 +269,99 @@
             margin: 0 auto 15px;
         }
         
+        /* Video Preview Overlay */
+        .video-preview-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .video-preview-container {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        
+        .video-preview {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .download-final-btn {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        }
+        
+        .download-final-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(72, 187, 120, 0.5);
+        }
+        
+        /* Pop-up Ad */
+        .popup-ad {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10002;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-ad-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            max-height: 80%;
+            position: relative;
+        }
+        
+        .popup-ad-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: #999;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-weight: bold;
+        }
+        
+        .popup-ad-close:hover {
+            color: #333;
+        }
+        
+        .popup-ad-text {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -411,7 +504,34 @@
         </div>
     </div>
 
+    <!-- Pop-up Ad -->
+    <div class="popup-ad" id="popupAd">
+        <div class="popup-ad-content">
+            <button class="popup-ad-close" onclick="closeAd()">×</button>
+            <div class="popup-ad-text">🎉 Видео готово к скачиванию!</div>
+            <div class="ad-placeholder" style="padding: 30px; font-size: 16px;">
+                [ Здесь будет ваша реклама ]<br>
+                <small>Спасибо за использование нашего сервиса!</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Preview Overlay -->
+    <div class="video-preview-overlay" id="videoPreview">
+        <div class="video-preview-container">
+            <video class="video-preview" controls id="videoPlayer">
+                Ваш браузер не поддерживает видео
+            </video>
+        </div>
+        <button class="download-final-btn" onclick="downloadFinal()">
+            ⬇️ Скачать видео
+        </button>
+    </div>
+
     <script>
+    let currentVideoUrl = '';
+    let currentVideoTitle = '';
+    
     function startDownload() {
         const url = document.getElementById('tiktokUrl').value;
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -436,13 +556,11 @@
                 loadingOverlay.style.display = 'none';
                 
                 if (data.success) {
-                    // Автоматичне завантаження відео
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = data.video_url;
-                    downloadLink.download = data.title;
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
+                    currentVideoUrl = data.video_url;
+                    currentVideoTitle = data.title;
+                    
+                    // Показуємо спливаючу рекламу
+                    showAd();
                     
                 } else {
                     alert('❌ ' + data.error);
@@ -452,6 +570,46 @@
                 loadingOverlay.style.display = 'none';
                 alert('❌ Ошибка сети. Попробуйте еще раз.');
             });
+    }
+    
+    function showAd() {
+        // Показуємо рекламу
+        document.getElementById('popupAd').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeAd() {
+        // Закриваємо рекламу і показуємо видео
+        document.getElementById('popupAd').style.display = 'none';
+        showVideoPreview();
+    }
+    
+    function showVideoPreview() {
+        // Показуємо затемнений перегляд з кнопкою скачування
+        const videoPreview = document.getElementById('videoPreview');
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        videoPlayer.src = currentVideoUrl;
+        videoPreview.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function downloadFinal() {
+        // Фінальне скачування
+        const downloadLink = document.createElement('a');
+        downloadLink.href = currentVideoUrl;
+        downloadLink.download = currentVideoTitle;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Закриваємо перегляд
+        closeVideoPreview();
+    }
+    
+    function closeVideoPreview() {
+        document.getElementById('videoPreview').style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
     
     // Автофокус на поле ввода
