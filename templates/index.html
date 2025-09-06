@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Скачать видео из TikTok без водяного знака | Быстро и бесплатно</title>
-    <meta name="description" content="Скачивайте видео из TikTok без водяного знака в HD качестве. Бесплатно, без регистрации, работает на всех устройствах. Лучший TikTok downloader 2025.">
+    <meta name="description" content="Скачивайте видео из TikTok без водяного знака в HD качестве. Бесплатно, без регистрации, работает на всех устройствах. Лучший TikTok downloader 2024.">
     <meta name="keywords" content="скачать тикток, tiktok скачать, без водяного знака, видео тикток, tiktok download, скачать видео тикток, tiktok без водяного знака, загрузить tiktok">
     <meta name="author" content="TikTok Downloader">
     <meta name="robots" content="index, follow, max-image-preview:large">
@@ -281,38 +281,63 @@
             z-index: 10001;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
         }
         
-        .video-preview-container {
-            position: relative;
-            width: 90%;
-            max-width: 500px;
-            margin-bottom: 20px;
-        }
-        
-        .video-preview {
-            width: 100%;
+        .video-preview-content {
+            background: white;
+            padding: 25px;
             border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         
+        .video-thumbnail {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .video-info {
+            margin-bottom: 25px;
+        }
+        
+        .video-ready-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .video-size {
+            color: #666;
+            font-size: 14px;
+        }
+        
         .download-final-btn {
-            padding: 18px 40px;
+            padding: 16px 30px;
             background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+            width: 100%;
         }
         
         .download-final-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(72, 187, 120, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
         }
         
         /* Pop-up Ad */
@@ -331,28 +356,35 @@
         
         .popup-ad-content {
             background: white;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
-            max-width: 90%;
-            max-height: 80%;
+            max-width: 400px;
+            width: 90%;
             position: relative;
         }
         
         .popup-ad-close {
             position: absolute;
             top: 15px;
-            right: 20px;
-            font-size: 28px;
+            right: 15px;
+            font-size: 24px;
             color: #999;
             cursor: pointer;
             background: none;
             border: none;
             font-weight: bold;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .popup-ad-close:hover {
             color: #333;
+            background: #f0f0f0;
         }
         
         .popup-ad-text {
@@ -404,6 +436,11 @@
             
             .faq-title {
                 font-size: 28px;
+            }
+            
+            .video-preview-content {
+                padding: 30px;
+                max-width: 350px;
             }
         }
         
@@ -509,7 +546,7 @@
         <div class="popup-ad-content">
             <button class="popup-ad-close" onclick="closeAd()">×</button>
             <div class="popup-ad-text">🎉 Видео готово к скачиванию!</div>
-            <div class="ad-placeholder" style="padding: 30px; font-size: 16px;">
+            <div class="ad-placeholder" style="padding: 25px; font-size: 15px;">
                 [ Здесь будет ваша реклама ]<br>
                 <small>Спасибо за использование нашего сервиса!</small>
             </div>
@@ -518,14 +555,18 @@
 
     <!-- Video Preview Overlay -->
     <div class="video-preview-overlay" id="videoPreview">
-        <div class="video-preview-container">
-            <video class="video-preview" controls id="videoPlayer">
-                Ваш браузер не поддерживает видео
-            </video>
+        <div class="video-preview-content">
+            <div class="video-thumbnail">
+                📹
+            </div>
+            <div class="video-info">
+                <div class="video-ready-text">Ваше видео готово!</div>
+                <div class="video-size">HD качество • Без водяного знака</div>
+            </div>
+            <button class="download-final-btn" onclick="downloadFinal()">
+                ⬇️ Скачать видео сейчас
+            </button>
         </div>
-        <button class="download-final-btn" onclick="downloadFinal()">
-            ⬇️ Скачать видео
-        </button>
     </div>
 
     <script>
@@ -579,17 +620,14 @@
     }
     
     function closeAd() {
-        // Закриваємо рекламу і показуємо видео
+        // Закриваємо рекламу і показуємо підтвердження
         document.getElementById('popupAd').style.display = 'none';
         showVideoPreview();
     }
     
     function showVideoPreview() {
-        // Показуємо затемнений перегляд з кнопкою скачування
+        // Показуємо компактне підтвердження з кнопкою скачування
         const videoPreview = document.getElementById('videoPreview');
-        const videoPlayer = document.getElementById('videoPlayer');
-        
-        videoPlayer.src = currentVideoUrl;
         videoPreview.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
