@@ -10,6 +10,26 @@
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ТВІЙ-КОД" crossorigin="anonymous"></script>
     
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="ТВІЙ_КОД_ВЕРИФІКАЦІЇ" />
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "TikTok Downloader",
+      "description": "Скачать видео из TikTok без водяного знака",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -22,6 +42,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            padding-bottom: 80px; /* Відступ для sticky footer */
         }
         
         /* Top Banner */
@@ -158,6 +179,17 @@
             backdrop-filter: blur(10px);
         }
         
+        /* Контекстна реклама перед FAQ */
+        .context-ad {
+            margin: 40px 0;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
         /* FAQ Section */
         .faq-section {
             margin: 40px 0;
@@ -190,14 +222,76 @@
             line-height: 1.6;
         }
         
-        /* Footer Banner */
-        .footer-banner {
-            background: #fff;
+        /* Sticky Footer Ad (Постоянно внизу) */
+        .sticky-footer-ad {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
             padding: 15px;
             text-align: center;
+            z-index: 999;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Спливаюча реклама на весь екран */
+        .popup-fullscreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-fullscreen-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-fullscreen {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 32px;
+            color: #aaa;
+            cursor: pointer;
+        }
+        
+        .close-fullscreen:hover {
+            color: #000;
+        }
+        
+        .ad-placeholder-fullscreen {
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .continue-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
             border-radius: 10px;
-            margin-top: 30px;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
         }
         
         @media (max-width: 768px) {
@@ -217,25 +311,16 @@
                 padding: 20px;
                 margin: 10px;
             }
+            
+            .popup-fullscreen-content {
+                padding: 20px;
+            }
+            
+            .ad-placeholder-fullscreen {
+                padding: 20px;
+            }
         }
     </style>
-        <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "TikTok Downloader",
-      "description": "Скачать видео из TikTok без водяного знака",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
-</head>
 </head>
 <body>
     <!-- Top Banner Ad -->
@@ -265,6 +350,13 @@
             <a href="#" id="downloadLink" class="download-video-btn" download>
                 ⬇️ Скачать видео
             </a>
+        </div>
+        
+        <!-- Context Ad Before FAQ -->
+        <div class="context-ad">
+            <div class="ad-placeholder">
+                [ Контекстная реклама перед вопросами ]
+            </div>
         </div>
         
         <!-- FAQ Section -->
@@ -298,15 +390,30 @@
         </div>
     </div>
 
-    <!-- Footer Banner Ad -->
-    <div class="footer-banner">
-        <div class="ad-placeholder">[ Рекламный баннер ]</div>
+    <!-- Sticky Footer Ad (Постоянно внизу экрана) -->
+    <div class="sticky-footer-ad">
+        <div class="ad-placeholder">[ Рекламный баннер внизу экрана ]</div>
     </div>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner">
             ⏳ {{ lang.loading }}
+        </div>
+    </div>
+
+    <!-- Pop-up Ad Fullscreen -->
+    <div id="popupAd" class="popup-fullscreen">
+        <div class="popup-fullscreen-content">
+            <span class="close-fullscreen" onclick="closePopup()">&times;</span>
+            <div class="popup-ad-content">
+                <h3>🎉 Видео готово к скачиванию!</h3>
+                <p>Спасибо за использование нашего сервиса!</p>
+                <div class="ad-placeholder-fullscreen">
+                    [ Всплывающая реклама на весь экран ]
+                </div>
+                <button class="continue-btn" onclick="closePopup()">Продолжить</button>
+            </div>
         </div>
     </div>
 
@@ -343,6 +450,9 @@
                     // Прокручуємо до результату
                     resultSection.scrollIntoView({ behavior: 'smooth' });
                     
+                    // Показуємо спливаючу рекламу
+                    setTimeout(showPopupAd, 1000);
+                    
                 } else {
                     alert('❌ ' + data.error);
                 }
@@ -351,6 +461,19 @@
                 loadingOverlay.style.display = 'none';
                 alert('❌ Ошибка сети. Попробуйте еще раз.');
             });
+    }
+    
+    function showPopupAd() {
+        // Показуємо спливаючу рекламу на весь екран
+        document.getElementById('popupAd').style.display = 'flex';
+        
+        // Блокуємо прокрутку сторінки
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closePopup() {
+        document.getElementById('popupAd').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Відновлюємо прокрутку
     }
     
     // Автофокус на поле ввода
