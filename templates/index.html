@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://ваш-сайт.onrender.com">
     
     <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ТВІЙ-КОД" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ТВОЙ-КОД" crossorigin="anonymous"></script>
     
     <style>
         * {
@@ -291,6 +291,17 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Error Message */
+        .error-message {
+            display: none;
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #c33;
+        }
         
         /* Desktop Styles */
         @media (min-width: 769px) {
@@ -315,6 +326,10 @@
             
             .input-group {
                 flex-direction: row;
+            }
+            
+            input[type="text"] {
+                flex: 1;
             }
             
             button.download-btn {
@@ -353,6 +368,9 @@
                 <button class="download-btn" onclick="startDownload()">Скачать видео</button>
             </div>
         </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage"></div>
         
         <!-- Video Result -->
         <div class="video-result" id="videoResult">
@@ -425,63 +443,107 @@
     </div>
 
     <script>
-    let currentVideoUrl = '';
+    let currentVideoData = null;
 
-    function startDownload() {
-        const url = document.getElementById('tiktokUrl').value;
+    function showError(message) {
+        const errorElement = document.getElementById('errorMessage');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
         
+        // Скрыть ошибку через 5 секунд
+        setTimeout(() => {
+            errorElement.style.display = 'none';
+        }, 5000);
+    }
+
+    function hideError() {
+        document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    async function startDownload() {
+        const url = document.getElementById('tiktokUrl').value.trim();
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const videoResult = document.getElementById('videoResult');
+        
+        hideError();
+        videoResult.style.display = 'none';
+
         if (!url) {
-            alert('Пожалуйста, введите ссылку на видео TikTok');
+            showError('Пожалуйста, введите ссылку на видео TikTok');
             return;
         }
-        
-        // Тут буде ваш API виклик для отримання video_url
-        // Для прикладу використовуємо введену URL
-        currentVideoUrl = url;
-        
-        const videoResult = document.getElementById('videoResult');
-        const videoPlayer = document.getElementById('videoPlayer');
-        
-        videoPlayer.src = currentVideoUrl;
-        videoResult.style.display = 'block';
-        videoResult.scrollIntoView({ behavior: 'smooth' });
+
+        if (!url.includes('tiktok.com')) {
+            showError('Пожалуйста, введите корректную ссылку TikTok');
+            return;
+        }
+
+        try {
+            loadingOverlay.style.display = 'flex';
+            
+            // Отправляем запрос на наш собственный API
+            const response = await fetch(`/api/download?url=${encodeURIComponent(url)}`);
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error || 'Не удалось обработать видео');
+            }
+
+            // Сохраняем данные видео для скачивания
+            currentVideoData = data;
+            
+            // Показываем видео для предпросмотра
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = data.video_url;
+            videoResult.style.display = 'block';
+            
+            // Прокручиваем к результату
+            videoResult.scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showError(error.message || 'Произошла ошибка при обработке видео');
+        } finally {
+            loadingOverlay.style.display = 'none';
+        }
     }
 
     async function downloadVideo() {
-        if (!currentVideoUrl) return;
-        
+        if (!currentVideoData || !currentVideoData.video_url) {
+            showError('Нет данных для скачивания');
+            return;
+        }
+
         const loadingOverlay = document.getElementById('loadingOverlay');
         
         try {
             loadingOverlay.style.display = 'flex';
             
-            // Отримуємо відео через fetch
-            const response = await fetch(currentVideoUrl);
+            // Скачиваем видео
+            const response = await fetch(currentVideoData.video_url);
             
             if (!response.ok) {
-                throw new Error('Не вдалося отримати видео');
+                throw new Error('Не удалось скачать видео');
             }
             
             const blob = await response.blob();
             const blobUrl = URL.createObjectURL(blob);
             
-            // Створюємо посилання для скачування
+            // Создаем ссылку для скачивания
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'tiktok_video_' + Date.now() + '.mp4';
+            link.download = currentVideoData.title || 'tiktok_video.mp4';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            // Чистимо пам'ять
-            setTimeout(() => {
-                URL.revokeObjectURL(blobUrl);
-                loadingOverlay.style.display = 'none';
-            }, 100);
+            // Очищаем память
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
             
         } catch (error) {
-            console.error('Помилка скачування:', error);
-            alert('Не вдалося скачати видео. Спробуйте ще раз.');
+            console.error('Ошибка скачивания:', error);
+            showError('Не удалось скачать видео. Попробуйте еще раз.');
+        } finally {
             loadingOverlay.style.display = 'none';
         }
     }
@@ -489,12 +551,15 @@
     // Автофокус на поле ввода
     document.getElementById('tiktokUrl').focus();
     
-    // Обробник Enter
+    // Обработчик Enter
     document.getElementById('tiktokUrl').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             startDownload();
         }
     });
+
+    // Скрывать ошибку при клике в любое место
+    document.addEventListener('click', hideError);
     </script>
 </body>
 </html>
