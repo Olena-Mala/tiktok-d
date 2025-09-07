@@ -95,3 +95,20 @@ def download_video():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+# ====== SEO ФАЙЛЫ ======
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('.', 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('.', 'sitemap.xml')
+
+# ====== ОБРАБОТКА ОШИБОК ======
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('index.html', lang=LANGUAGES['ru']), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('index.html', lang=LANGUAGES['ru']), 500
