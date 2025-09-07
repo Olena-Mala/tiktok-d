@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, session
+from flask import Flask, request, jsonify, render_template, send_from_directory
 import requests
 from datetime import datetime
 import os
@@ -56,6 +56,23 @@ def get_tiktok_video(url):
 def index():
     return render_template('index.html', lang=LANGUAGES['ru'])
 
+# ====== НОВЫЕ СТРАНИЦЫ ======
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+@app.route('/howto')
+def howto():
+    return render_template('howto.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/api/download')
 def download_video():
     tiktok_url = request.args.get('url')
@@ -78,20 +95,3 @@ def download_video():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-
-
-@app.route('/privacy')
-def privacy():
-    return render_template('privacy.html')
-
-@app.route('/terms')
-def terms():
-    return render_template('terms.html')
-
-@app.route('/howto')
-def howto():
-    return render_template('howto.html')
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
