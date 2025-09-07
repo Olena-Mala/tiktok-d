@@ -11,8 +11,10 @@
     <meta name="theme-color" content="#667eea">
     <link rel="canonical" href="https://ваш-сайт.onrender.com">
     
-    <!-- Google AdSense -->
+    <!-- Google AdSense (закомментирован) -->
+    <!--
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-ТВОЙ-КОД" crossorigin="anonymous"></script>
+    -->
     
     <style>
         * {
@@ -29,7 +31,7 @@
             padding-bottom: 70px;
         }
         
-        /* Top Banner */
+        /* Top Banner (стили остаются на будущее) */
         .top-banner {
             background: rgba(255, 255, 255, 0.95);
             padding: 12px;
@@ -40,6 +42,7 @@
             position: sticky;
             top: 10px;
             z-index: 100;
+            display: none; /* Скрываем */
         }
         
         .ad-placeholder {
@@ -50,6 +53,7 @@
             font-size: 14px;
             font-weight: 500;
             border: 1px solid #e9ecef;
+            display: none; /* Скрываем */
         }
         
         /* Main Container */
@@ -128,13 +132,14 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
         }
         
-        /* Ad after form */
+        /* Ad after form (стили остаются) */
         .ad-after-form {
             margin: 20px 0;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 8px;
             border: 1px solid #e9ecef;
+            display: none; /* Скрываем */
         }
         
         /* Video Result Section */
@@ -180,13 +185,14 @@
             box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
         }
         
-        /* Ad after download */
+        /* Ad after download (стили остаются) */
         .ad-after-download {
             margin: 20px 0;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 8px;
             border: 1px solid #e9ecef;
+            display: none; /* Скрываем */
         }
         
         /* Features Grid */
@@ -227,13 +233,14 @@
             line-height: 1.4;
         }
         
-        /* Ad before FAQ */
+        /* Ad before FAQ (стили остаются) */
         .ad-before-faq {
             margin: 25px 0;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 8px;
             border: 1px solid #e9ecef;
+            display: none; /* Скрываем */
         }
         
         /* FAQ Section */
@@ -271,7 +278,7 @@
             font-size: 14px;
         }
         
-        /* Sticky Footer Ad */
+        /* Sticky Footer Ad (стили остаются) */
         .sticky-footer-ad {
             position: fixed;
             bottom: 0;
@@ -283,6 +290,7 @@
             z-index: 999;
             box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
             border-top: 1px solid #e9ecef;
+            display: none; /* Скрываем */
         }
         
         /* Loading Overlay */
@@ -396,15 +404,18 @@
 <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
-    <!-- Top Banner Ad -->
+    <!-- Top Banner Ad (закомментирован) -->
+    <!--
     <div class="top-banner">
         <div class="ad-placeholder">[ Рекламный баннер ]</div>
     </div>
+    -->
 
     <div class="main-container">
         <h1>📥 Скачать видео из TikTok</h1>
         <p class="description">Без водяного знака • HD качество • Бесплатно</p>
         
+        <!-- ТОЛЬКО ОДНА ФОРМА ВВОДА (без дублирования) -->
         <div class="download-form">
             <div class="input-group">
                 <input type="text" id="tiktokUrl" placeholder="Вставьте ссылку на видео TikTok..." />
@@ -412,10 +423,12 @@
             </div>
         </div>
 
-        <!-- Ad after form -->
+        <!-- Ad after form (закомментирован) -->
+        <!--
         <div class="ad-after-form">
             <div class="ad-placeholder">[ Рекламный баннер ]</div>
         </div>
+        -->
 
         <!-- Error Message -->
         <div class="error-message" id="errorMessage"></div>
@@ -432,10 +445,12 @@
             </button>
         </div>
         
-        <!-- Ad after download -->
+        <!-- Ad after download (закомментирован) -->
+        <!--
         <div class="ad-after-download">
             <div class="ad-placeholder">[ Рекламный баннер ]</div>
         </div>
+        -->
         
         <!-- Features Grid -->
         <div class="features-grid">
@@ -461,10 +476,12 @@
             </div>
         </div>
         
-        <!-- Ad before FAQ -->
+        <!-- Ad before FAQ (закомментирован) -->
+        <!--
         <div class="ad-before-faq">
             <div class="ad-placeholder">[ Рекламный баннер ]</div>
         </div>
+        -->
         
         <!-- FAQ Section -->
         <div class="faq-section">
@@ -487,10 +504,12 @@
         </div>
     </div>
 
-    <!-- Sticky Footer Ad -->
+    <!-- Sticky Footer Ad (закомментирован) -->
+    <!--
     <div class="sticky-footer-ad">
         <div class="ad-placeholder">[ Рекламный баннер ]</div>
     </div>
+    -->
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
