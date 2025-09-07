@@ -156,6 +156,8 @@
             font-weight: 600;
             transition: all 0.3s;
             margin-top: 15px;
+            border: none;
+            cursor: pointer;
         }
         
         .download-final-btn:hover {
@@ -357,9 +359,9 @@
                     Ваш браузер не поддерживает видео
                 </video>
             </div>
-            <a href="#" id="finalDownloadLink" class="download-final-btn" download>
-                ⬇️ Скачать видео сейчас
-            </a>
+            <button class="download-final-btn" onclick="downloadFinal()">
+                ⬇️ Скачать
+            </button>
         </div>
         
         <!-- Features Grid -->
@@ -421,6 +423,9 @@
     </div>
 
     <script>
+    let currentVideoUrl = '';
+    let currentVideoTitle = '';
+
     function startDownload() {
         const url = document.getElementById('tiktokUrl').value;
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -435,28 +440,23 @@
             return;
         }
         
-        // Показуємо завантаження
         loadingOverlay.style.display = 'flex';
         
-        // Відправляємо запит на сервер
         fetch(`/api/download?url=${encodeURIComponent(url)}`)
             .then(response => response.json())
             .then(data => {
                 loadingOverlay.style.display = 'none';
                 
                 if (data.success) {
-                    // Показуємо результат
+                    currentVideoUrl = data.video_url;
+                    currentVideoTitle = data.title || 'tiktok_video.mp4';
+                    
                     const videoResult = document.getElementById('videoResult');
                     const videoPlayer = document.getElementById('videoPlayer');
-                    const downloadLink = document.getElementById('finalDownloadLink');
                     
-                    videoPlayer.src = data.video_url;
-                    downloadLink.href = data.video_url;
-                    downloadLink.download = 'tiktok_video.mp4';
-                    
+                    videoPlayer.src = currentVideoUrl;
                     videoResult.style.display = 'block';
                     
-                    // Прокручуємо до результату
                     videoResult.scrollIntoView({ behavior: 'smooth' });
                     
                 } else {
@@ -468,11 +468,32 @@
                 alert('❌ Ошибка сети. Попробуйте еще раз.');
             });
     }
-    
+
+    function downloadFinal() {
+        if (!currentVideoUrl) return;
+        
+        // Створюємо тимчасове посилання для скачування
+        const tempLink = document.createElement('a');
+        tempLink.style.display = 'none';
+        tempLink.href = currentVideoUrl;
+        tempLink.download = currentVideoTitle;
+        
+        // Додаємо до документу
+        document.body.appendChild(tempLink);
+        
+        // Симулюємо клік
+        tempLink.click();
+        
+        // Прибираємо через деякий час
+        setTimeout(() => {
+            document.body.removeChild(tempLink);
+        }, 100);
+    }
+
     // Автофокус на поле ввода
     document.getElementById('tiktokUrl').focus();
     
-    // Додаємо обробник для Enter
+    // Обробник Enter
     document.getElementById('tiktokUrl').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             startDownload();
