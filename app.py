@@ -91,7 +91,8 @@ def download_video():
         })
     else:
         return jsonify({'success': False, 'error': lang['error_general']})
-# ====== SEO ФАЙЛЫ (ДОБАВЬ ЭТО ПЕРЕД ПОСЛЕДНЕЙ СТРОКОЙ) ======
+
+# ====== SEO ФАЙЛЫ ======
 @app.route('/robots.txt')
 def robots():
     content = '''User-agent: *
@@ -138,6 +139,19 @@ def sitemap():
 </urlset>'''
     return content, 200, {'Content-Type': 'application/xml'}
 
+# ====== КЕШИРОВАНИЕ ======
+@app.after_request
+def add_header(response):
+    """
+    Добавляет заголовки кэширования для статических файлов.
+    Браузер будет хранить CSS/JS 5 минут вместо того чтобы грузить их каждый раз.
+    """
+    # Кэшируем главную страницу и статические файлы
+    if request.path == '/' or request.path.endswith(('.css', '.js', '.png', '.jpg', '.jpeg', '.gif')):
+        response.cache_control.max_age = 300  # 5 минут в секундах
+        response.cache_control.public = True
+    return response
+
 # ====== ОБРАБОТКА ОШИБОК ======
 @app.errorhandler(404)
 def not_found(error):
@@ -146,14 +160,7 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('index.html', lang=LANGUAGES['ru']), 500
-@app.after_request
-def add_header(response):
-    # Кэшируем главную страницу и статические файлы на 5 минут
-    if request.path == '/' or request.path.endswith(('.css', '.js')):
-        response.cache_control.max_age = 300  # 5 минут
-        response.cache_control.public = True
-    return response    
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-
