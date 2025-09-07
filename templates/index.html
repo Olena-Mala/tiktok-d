@@ -135,14 +135,16 @@
         }
         
         .video-container {
-            max-width: 300px;
+            max-width: 280px;
             margin: 0 auto 20px;
         }
         
         .video-player {
             width: 100%;
+            height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-height: 500px;
         }
         
         .download-final-btn {
@@ -330,7 +332,7 @@
             }
             
             .video-container {
-                max-width: 400px;
+                max-width: 320px;
             }
         }
     </style>
@@ -359,10 +361,9 @@
                     Ваш браузер не поддерживает видео
                 </video>
             </div>
-            <!-- ЗМІНЕНО: Посилання замість кнопки для скачування -->
-            <a href="#" id="downloadLink" class="download-final-btn" download="tiktok_video.mp4">
+            <button class="download-final-btn" onclick="downloadVideo()">
                 ⬇️ Скачать
-            </a>
+            </button>
         </div>
         
         <!-- Features Grid -->
@@ -419,52 +420,76 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner">
             <div class="spinner"></div>
-            <div>Обработка видео...</div>
+            <div>Скачивание видео...</div>
         </div>
     </div>
 
     <script>
+    let currentVideoUrl = '';
+
     function startDownload() {
         const url = document.getElementById('tiktokUrl').value;
-        const loadingOverlay = document.getElementById('loadingOverlay');
         
         if (!url) {
             alert('Пожалуйста, введите ссылку на видео TikTok');
             return;
         }
         
-        if (!url.includes('tiktok.com')) {
-            alert('Пожалуйста, введите корректную ссылку TikTok');
-            return;
-        }
+        // Тут буде ваш API виклик для отримання video_url
+        // Для прикладу використовуємо введену URL
+        currentVideoUrl = url;
         
-        // Показуємо завантаження
-        loadingOverlay.style.display = 'flex';
+        const videoResult = document.getElementById('videoResult');
+        const videoPlayer = document.getElementById('videoPlayer');
         
-        // Симулюємо API запит (замініть на ваш реальний API)
-        setTimeout(() => {
-            loadingOverlay.style.display = 'none';
-            
-            // Отримуємо URL відео (для прикладу використовуємо саму посилання)
-            const videoUrl = url;
-            
-            const videoResult = document.getElementById('videoResult');
-            const videoPlayer = document.getElementById('videoPlayer');
-            const downloadLink = document.getElementById('downloadLink');
-            
-            videoPlayer.src = videoUrl;
-            downloadLink.href = videoUrl;
-            
-            videoResult.style.display = 'block';
-            videoResult.scrollIntoView({ behavior: 'smooth' });
-            
-        }, 2000); // Симулюємо затримку запиту
+        videoPlayer.src = currentVideoUrl;
+        videoResult.style.display = 'block';
+        videoResult.scrollIntoView({ behavior: 'smooth' });
     }
-    
+
+    async function downloadVideo() {
+        if (!currentVideoUrl) return;
+        
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        
+        try {
+            loadingOverlay.style.display = 'flex';
+            
+            // Отримуємо відео через fetch
+            const response = await fetch(currentVideoUrl);
+            
+            if (!response.ok) {
+                throw new Error('Не вдалося отримати видео');
+            }
+            
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            
+            // Створюємо посилання для скачування
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'tiktok_video_' + Date.now() + '.mp4';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Чистимо пам'ять
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+                loadingOverlay.style.display = 'none';
+            }, 100);
+            
+        } catch (error) {
+            console.error('Помилка скачування:', error);
+            alert('Не вдалося скачати видео. Спробуйте ще раз.');
+            loadingOverlay.style.display = 'none';
+        }
+    }
+
     // Автофокус на поле ввода
     document.getElementById('tiktokUrl').focus();
     
-    // Додаємо обробник для Enter
+    // Обробник Enter
     document.getElementById('tiktokUrl').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             startDownload();
