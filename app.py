@@ -7,13 +7,30 @@ import logging
 from urllib.parse import urlparse, quote
 from functools import wraps
 import time
-
+import threading
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def keep_alive():
+    """Будильник для сайта - звоним себе каждые 5 минут"""
+    while True:
+        try:
+            # ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ АДРЕС!
+            requests.get('https://tiktok-downloader-9e9d.onrender.com/health', timeout=10)
+            logger.info(f"Будильник сработал! {datetime.now()}")
+        except Exception as e:
+            logger.error(f"Будильник не сработал: {e}")
+        time.sleep(300)  # Спим 5 минут
+
+# Включаем будильник только для реального сайта
+if not os.environ.get('WERKZEUG_RUN_MAIN'):
+    keep_alive_thread = threading.Thread(target=keep_alive, daemon=True)
+    keep_alive_thread.start()
+    logger.info("Будильник включен!")
 
 # Кеш для хранения результатов запросов (в памяти, для продакшена лучше использовать Redis)
 request_cache = {}
