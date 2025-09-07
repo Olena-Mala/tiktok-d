@@ -31,21 +31,25 @@
         
         /* Top Banner */
         .top-banner {
-            background: #fff;
+            background: rgba(255, 255, 255, 0.95);
             padding: 12px;
             text-align: center;
             border-radius: 8px;
             margin-bottom: 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
         }
         
         .ad-placeholder {
             padding: 15px;
             background: #f8f9fa;
             border-radius: 6px;
-            color: #666;
+            color: #888;
             font-size: 14px;
             font-weight: 500;
+            border: 1px solid #e9ecef;
         }
         
         /* Main Container */
@@ -124,6 +128,15 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
         }
         
+        /* Ad after form */
+        .ad-after-form {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
         /* Video Result Section */
         .video-result {
             display: none;
@@ -167,6 +180,15 @@
             box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
         }
         
+        /* Ad after download */
+        .ad-after-download {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
         /* Features Grid */
         .features-grid {
             display: grid;
@@ -203,6 +225,15 @@
             color: #666;
             font-size: 14px;
             line-height: 1.4;
+        }
+        
+        /* Ad before FAQ */
+        .ad-before-faq {
+            margin: 25px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
         }
         
         /* FAQ Section */
@@ -251,6 +282,7 @@
             text-align: center;
             z-index: 999;
             box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+            border-top: 1px solid #e9ecef;
         }
         
         /* Loading Overlay */
@@ -380,6 +412,11 @@
             </div>
         </div>
 
+        <!-- Ad after form -->
+        <div class="ad-after-form">
+            <div class="ad-placeholder">[ Рекламный баннер ]</div>
+        </div>
+
         <!-- Error Message -->
         <div class="error-message" id="errorMessage"></div>
         
@@ -393,6 +430,11 @@
             <button class="download-final-btn" onclick="downloadVideo()">
                 ⬇️ Скачать
             </button>
+        </div>
+        
+        <!-- Ad after download -->
+        <div class="ad-after-download">
+            <div class="ad-placeholder">[ Рекламный баннер ]</div>
         </div>
         
         <!-- Features Grid -->
@@ -417,6 +459,11 @@
                 <h3>Безопасно</h3>
                 <p>Без регистрации</p>
             </div>
+        </div>
+        
+        <!-- Ad before FAQ -->
+        <div class="ad-before-faq">
+            <div class="ad-placeholder">[ Рекламный баннер ]</div>
         </div>
         
         <!-- FAQ Section -->
