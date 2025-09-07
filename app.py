@@ -146,7 +146,13 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('index.html', lang=LANGUAGES['ru']), 500
-    
+@app.after_request
+def add_header(response):
+    # Кэшируем главную страницу и статические файлы на 5 минут
+    if request.path == '/' or request.path.endswith(('.css', '.js')):
+        response.cache_control.max_age = 300  # 5 минут
+        response.cache_control.public = True
+    return response    
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
