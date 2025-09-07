@@ -91,18 +91,52 @@ def download_video():
         })
     else:
         return jsonify({'success': False, 'error': lang['error_general']})
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
-# ====== SEO ФАЙЛЫ ======
+# ====== SEO ФАЙЛЫ (ДОБАВЬ ЭТО ПЕРЕД ПОСЛЕДНЕЙ СТРОКОЙ) ======
 @app.route('/robots.txt')
 def robots():
-    return send_from_directory('.', 'robots.txt')
+    content = '''User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://tiktok-downloader-9e9d.onrender.com/sitemap.xml'''
+    return content, 200, {'Content-Type': 'text/plain'}
 
 @app.route('/sitemap.xml')
 def sitemap():
-    return send_from_directory('.', 'sitemap.xml')
+    content = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://tiktok-downloader-9e9d.onrender.com</loc>
+        <lastmod>2025-03-09</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://tiktok-downloader-9e9d.onrender.com/privacy</loc>
+        <lastmod>2025-03-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tiktok-downloader-9e9d.onrender.com/terms</loc>
+        <lastmod>2025-03-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tiktok-downloader-9e9d.onrender.com/howto</loc>
+        <lastmod>2025-03-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://tiktok-downloader-9e9d.onrender.com/about</loc>
+        <lastmod>2025-03-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+</urlset>'''
+    return content, 200, {'Content-Type': 'application/xml'}
 
 # ====== ОБРАБОТКА ОШИБОК ======
 @app.errorhandler(404)
@@ -112,3 +146,8 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('index.html', lang=LANGUAGES['ru']), 500
+    
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
+
